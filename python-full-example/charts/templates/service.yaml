@@ -1,0 +1,14 @@
+{{- $deployName := printf "%s-%s" .Release.Name "server" -}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $deployName }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  type: LoadBalancer
+  selector:
+    app: {{ $deployName }}
+  ports:
+  - protocol: TCP
+    port: 5000
