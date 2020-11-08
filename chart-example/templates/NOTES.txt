@@ -1,0 +1,2 @@
+{{ .Release.Name }} have been deployed successfully
+in namespace {{ .Release.Namespace }}!

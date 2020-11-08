@@ -1,0 +1,36 @@
+{{- $deployName := printf "%s-%s" .Release.Name "nginx" -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $deployName }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: nginx
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: {{ $deployName }}
+  template:
+    metadata:
+      labels:
+        app: {{ $deployName }}
+      {{- if .Values.podAnnotations }}
+      annotations:
+        {{- range $key, $value := .Values.podAnnotations }}
+        {{ $key }}: {{ $value }}
+        {{- end }}
+      {{- end }}
+    spec:
+      containers:
+      - name: nginx
+        image: {{ .Values.image }}
+        ports:
+        - containerPort: 80
+        env: 
+        - name: foo
+          value: bar
+        {{- if .Values.customVar }}
+        - name: CUSTOM_VAR
+          value: {{ .Values.customVar }}
+        {{- end }}
