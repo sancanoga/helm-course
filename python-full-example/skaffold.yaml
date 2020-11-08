@@ -1,0 +1,17 @@
+apiVersion: skaffold/v1beta11
+kind: Config
+build:
+  artifacts:
+    - image: index.docker.io/sancanoga/python-example
+      sync:
+        manual:
+        - src: "app.py"
+          dest: /usr/src/app
+
+deploy:
+  helm:
+    releases:
+      - name: local-myapp
+        chartPath: charts
+        values:
+          image: index.docker.io/sancanoga/python-example
